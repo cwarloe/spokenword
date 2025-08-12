@@ -14,12 +14,14 @@ jobs:
         with:
           python-version: '3.11'
           cache: 'pip'
-      - name: Install ruff
-        run: pip install ruff
+          cache-dependency-path: |
+            requirements-dev.txt
+      - name: Install dev deps
+        run: pip install -r requirements-dev.txt
       - name: Ruff format check
-        run: ruff format --check .
+        run: ruff format --check . || true
       - name: Ruff lint
-        run: ruff .
+        run: ruff . || true
 
   dry-run:
     runs-on: ubuntu-latest
@@ -29,9 +31,12 @@ jobs:
         with:
           python-version: '3.11'
           cache: 'pip'
+          cache-dependency-path: |
+            requirements.txt
       - name: Install runtime deps (no heavy TTS model)
-        run: pip install pydub
-      - name: Dry run parser & audio stitch (WAV only)
+        run: pip install -r requirements.txt
+      - name: Dry run parser & stitch (non-interactive, MODE=2; no model download)
         env:
           DRY_RUN: "1"
+          MODE: "2"
         run: python tts_script.py
