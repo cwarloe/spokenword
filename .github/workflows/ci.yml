@@ -1,4 +1,3 @@
-
 name: CI
 
 on:
@@ -35,7 +34,7 @@ jobs:
             requirements.txt
       - name: Install runtime deps (no heavy TTS model)
         run: pip install -r requirements.txt
-      - name: Dry run parser & stitch (non-interactive, MODE=2; no model download)
+      - name: Dry run parser & stitch (non-interactive)
         env:
           DRY_RUN: "1"
           MODE: "2"
