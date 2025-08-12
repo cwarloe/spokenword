@@ -1,7 +1,16 @@
 
-from TTS.api import TTS
+"""
+Patched tts_script.py — adds DRY_RUN mode for CI:
+- Set environment variable DRY_RUN=1 to skip loading the XTTS model.
+- In DRY_RUN, the script parses tags and creates WAV output using silence
+  (and optional background music, if present), avoiding any heavyweight downloads.
+"""
+
+import os
+import re
 from pydub import AudioSegment
-import os, re
+
+DRY_RUN = os.getenv("DRY_RUN") == "1"
 
 # Config
 text_file = "text.txt"
@@ -26,23 +35,37 @@ if not raw_text:
 # Prepare output folder
 os.makedirs(output_dir, exist_ok=True)
 
-# Load model
-print("\n🔄 Loading XTTS v2 model...")
-tts = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2", progress_bar=False)
+# Lazy import TTS only if not dry-run
+tts = None
+if not DRY_RUN:
+    print("\n🔄 Loading XTTS v2 model...")
+    from TTS.api import TTS  # import here to avoid heavy deps during DRY_RUN
+    tts = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2", progress_bar=False)
 
-# Ask for mode
-print("\nSelect mode:")
-print("1. Single voice (choose at prompt)")
-print("2. Multi-voice script ([voice:], [pause:], [bgmusic:] tags)")
-mode = input("Choice (1 or 2): ").strip()
+def synth_text_to_wav(token_text: str, voice_path: str | None, tmp_wav: str) -> AudioSegment:
+    """
+    In normal mode: generate speech with XTTS and return AudioSegment.
+    In DRY_RUN: produce a short silence placeholder for the same duration approximation.
+    """
+    if DRY_RUN:
+        # 1 second of silence per ~90 characters (very rough stand-in)
+        approx_sec = max(0.6, min(6.0, len(token_text) / 90.0))
+        seg = AudioSegment.silent(duration=int(approx_sec * 1000))
+        seg.export(tmp_wav, format="wav")
+        return seg
+    else:
+        if voice_path:
+            tts.tts_to_file(text=token_text, speaker_wav=voice_path, language="en", file_path=tmp_wav)
+        else:
+            tts.tts_to_file(text=token_text, file_path=tmp_wav)
+        return AudioSegment.from_wav(tmp_wav)
 
-final_segments = []
-current_music = None
-
-if mode == "2":
+def run_multi_voice(raw_text: str):
     token_pattern = r"(\[voice:.*?\]|\[pause:.*?\]|\[bgmusic:.*?\])"
     tokens = re.split(token_pattern, raw_text, flags=re.I)
 
+    final_segments = []
+    current_music = None
     current_voice_path = None
 
     for token in tokens:
@@ -80,15 +103,10 @@ if mode == "2":
                 current_music = None
 
         else:
-            # Spoken text
+            # Spoken text (or DRY_RUN placeholder)
             print(f"💬 Speaking: {token[:60]}...")
             tmp_wav = os.path.join(output_dir, "temp.wav")
-            if current_voice_path:
-                tts.tts_to_file(text=token, speaker_wav=current_voice_path, language="en", file_path=tmp_wav)
-            else:
-                tts.tts_to_file(text=token, file_path=tmp_wav)
-
-            voice_seg = AudioSegment.from_wav(tmp_wav)
+            voice_seg = synth_text_to_wav(token, current_voice_path, tmp_wav)
 
             # Overlay music if active
             if current_music:
@@ -102,17 +120,19 @@ if mode == "2":
             final_segments.append(voice_seg)
             final_segments.append(AudioSegment.silent(duration=int(default_pause * 1000)))
 
-    # Combine and export
+    # Combine and export (WAV in DRY_RUN to avoid ffmpeg)
     combined = AudioSegment.silent(duration=0)
     for seg in final_segments:
         combined += seg
 
-    out = os.path.join(output_dir, "multi_voice_with_music.mp3")
-    combined.export(out, format="mp3")
-    print(f"\n✅ Multi-voice track with music saved as '{out}'")
+    out_name = "multi_voice_with_music"
+    out_ext = "wav" if DRY_RUN else "mp3"
+    out_path = os.path.join(output_dir, f"{out_name}.{out_ext}")
+    combined.export(out_path, format=out_ext)
+    print(f"\n✅ Multi-voice track{' (DRY_RUN WAV)' if DRY_RUN else ''} saved as '{out_path}'")
 
-else:
-    # Single voice mode
+def run_single_voice(raw_text: str):
+    # List available voices (if any)
     available_voices = [f for f in os.listdir(voices_dir) if f.lower().endswith(".wav")] if os.path.exists(voices_dir) else []
     selected_voice_path = None
 
@@ -123,7 +143,6 @@ else:
         print("  0. All voices")
 
         choice = input("\nSelect voice number (or press Enter for default): ").strip()
-
         if choice.isdigit():
             choice_num = int(choice)
             if choice_num == 0:
@@ -131,19 +150,27 @@ else:
                     name = os.path.splitext(voice)[0]
                     print(f"🎙 Generating for {name}...")
                     tmp_wav = os.path.join(output_dir, f"{name}.wav")
-                    tts.tts_to_file(text=raw_text, speaker_wav=os.path.join(voices_dir, voice), language="en", file_path=tmp_wav)
-                    AudioSegment.from_wav(tmp_wav).export(os.path.join(output_dir, f"{name}.mp3"), format="mp3")
-                print(f"\n✅ All voices complete. MP3s saved in '{output_dir}'")
+                    seg = synth_text_to_wav(raw_text, os.path.join(voices_dir, voice), tmp_wav)
+                    # Export WAV in DRY_RUN, MP3 otherwise
+                    out_ext = "wav" if DRY_RUN else "mp3"
+                    seg.export(os.path.join(output_dir, f"{name}.{out_ext}"), format=out_ext)
+                print(f"\n✅ All voices complete. Files saved in '{output_dir}'")
                 raise SystemExit(0)
             elif 1 <= choice_num <= len(available_voices):
                 selected_voice_path = os.path.join(voices_dir, available_voices[choice_num - 1])
 
-    if selected_voice_path:
-        tmp_wav = os.path.join(output_dir, "single.wav")
-        tts.tts_to_file(text=raw_text, speaker_wav=selected_voice_path, language="en", file_path=tmp_wav)
-    else:
-        tmp_wav = os.path.join(output_dir, "default.wav")
-        tts.tts_to_file(text=raw_text, file_path=tmp_wav)
+    tmp_wav = os.path.join(output_dir, "single.wav")
+    seg = synth_text_to_wav(raw_text, selected_voice_path, tmp_wav)
+    out_ext = "wav" if DRY_RUN else "mp3"
+    seg.export(os.path.join(output_dir, f"output.{out_ext}"), format=out_ext)
+    print(f"\n✅ Single voice track saved as '{os.path.join(output_dir, f'output.{out_ext}')}'")
 
-    AudioSegment.from_wav(tmp_wav).export(os.path.join(output_dir, "output.mp3"), format="mp3")
-    print(f"\n✅ Single voice track saved as '{os.path.join(output_dir, 'output.mp3')}'")
+if __name__ == "__main__":
+    print("\nSelect mode:")
+    print("1. Single voice (choose at prompt)")
+    print("2. Multi-voice script ([voice:], [pause:], [bgmusic:] tags)")
+    mode = input("Choice (1 or 2): ").strip()
+    if mode == "2":
+        run_multi_voice(raw_text)
+    else:
+        run_single_voice(raw_text)
