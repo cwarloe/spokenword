@@ -1,0 +1,37 @@
+
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: Install ruff
+        run: pip install ruff
+      - name: Ruff format check
+        run: ruff format --check .
+      - name: Ruff lint
+        run: ruff .
+
+  dry-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: Install runtime deps (no heavy TTS model)
+        run: pip install pydub
+      - name: Dry run parser & audio stitch (WAV only)
+        env:
+          DRY_RUN: "1"
+        run: python tts_script.py
