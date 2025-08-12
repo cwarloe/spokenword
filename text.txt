@@ -1,0 +1,15 @@
+[voice:narrator]
+Welcome to the Coqui XTTS demo. We will showcase multiple voices, pauses, and background music.
+[pause:0.8]
+[voice:teen_male]
+Hey everyone! I’m the teen male voice. Pretty cool, right?
+[pause:0.6]
+[voice:teen_female]
+I’m the teen female voice. Let’s add some ambiance next.
+[pause:0.6]
+[bgmusic:calm.wav]
+[voice:mid_male]
+Now we have background music under my line. This is great for narration.
+[pause:0.8]
+[voice:mid_female]
+And I’ll wrap it up. Replace the voice WAVs with real speech clips to get true cloning.
