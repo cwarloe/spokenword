@@ -7,6 +7,7 @@ Non-interactive & CI-friendly TTS script
 import os
 import re
 import sys
+
 from pydub import AudioSegment
 
 DRY_RUN = os.getenv("DRY_RUN") == "1"
@@ -56,7 +57,7 @@ def synth_text_to_wav(token_text: str, voice_path: str | None, tmp_wav: str) -> 
 
 def run_multi_voice(raw_text: str):
     token_pattern = r"(\[voice:.*?\]|\[pause:.*?\]|\[bgmusic:.*?\])"
-    tokens = re.split(token_pattern, raw_text, flags=re.I)
+    tokens = re.split(token_pattern, raw_text, flags=re.IGNORECASE)
 
     final_segments = []
     current_music = None
