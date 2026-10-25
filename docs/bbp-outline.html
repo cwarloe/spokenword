@@ -4,49 +4,75 @@
   <meta charset="UTF-8">
   <title>BBP Outline - Spoken Word (Local TTS)</title>
   <style>
+    /* Theme: blue is the default. Switch with <body data-theme="green|orange|purple|gray"> */
+    :root {
+      --accent: #1f5f9e;        /* strong: act bars, outer border */
+      --accent-mid: #bcd4ec;    /* key idea cells */
+      --accent-soft: #dce9f6;   /* section headers */
+      --accent-faint: #eef4fa;  /* explanation cells */
+      --accent-ink: #12365c;    /* text on tints */
+      --line: #8fb0d1;
+    }
+    body[data-theme="green"]  { --accent:#2e7d4f; --accent-mid:#bfe0cc; --accent-soft:#dcefe3; --accent-faint:#eff7f2; --accent-ink:#17482c; --line:#93c1a5; }
+    body[data-theme="orange"] { --accent:#c25e12; --accent-mid:#f5d2b0; --accent-soft:#fbe6d2; --accent-faint:#fdf3ea; --accent-ink:#6b3207; --line:#e0b48a; }
+    body[data-theme="purple"] { --accent:#6b46a8; --accent-mid:#d9cbee; --accent-soft:#e8dff6; --accent-faint:#f5f0fb; --accent-ink:#3a2266; --line:#b9a4dc; }
+    body[data-theme="gray"]   { --accent:#4a4f57; --accent-mid:#d0d3d8; --accent-soft:#e4e6e9; --accent-faint:#f3f4f5; --accent-ink:#23262b; --line:#a5a9b0; }
+
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
       background-color: white;
+      color: #1b1b1b;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     }
+
+    h1, h2 { color: var(--accent-ink); }
 
     .bbp-table {
       width: 100%;
       border-collapse: collapse;
-      border: 2px solid black;
+      border: 2px solid var(--accent);
       margin-bottom: 20px;
       table-layout: fixed;
     }
 
     .bbp-table td {
-      border: 1px solid black;
+      border: 1px solid var(--line);
       padding: 12px;
       vertical-align: top;
       font-size: 11pt;
     }
 
     .section-header {
-      background-color: #e8e8e8;
+      background-color: var(--accent-soft);
+      color: var(--accent-ink);
       font-weight: bold;
       text-align: center;
     }
 
     .act-header {
-      background-color: #d0d0d0;
+      background-color: var(--accent);
+      color: #fff;
       font-weight: bold;
       font-size: 12pt;
       text-align: center;
     }
 
     .key-idea-cell {
-      background-color: #f0f0f0;
+      background-color: var(--accent-mid);
+      color: var(--accent-ink);
       font-weight: bold;
       vertical-align: middle;
     }
 
     .explanation-cell {
-      background-color: #f8f8f8;
+      background-color: var(--accent-faint);
       vertical-align: middle;
+    }
+
+    .transition-cell {
+      background-color: #fff;
     }
 
     .footer-text {
@@ -60,12 +86,12 @@
       font-size: 9pt;
       font-weight: normal;
       text-transform: uppercase;
-      color: #555;
+      color: var(--accent);
       margin-bottom: 4px;
     }
   </style>
 </head>
-<body>
+<body data-theme="blue">
   <h1>Beyond Bullet Points Outline</h1>
   <h2>Spoken Word (Local TTS)</h2>
   <h3>Audience: creators who want offline voiceovers with pauses and background music</h3>
@@ -102,8 +128,7 @@
       <td>Voiceovers made offline on your terms.</td>
     </tr>
 
-    <tr><td colspan="3" class="section-header">TRANSITION 1</td></tr>
-    <tr><td colspan="3">This project runs voice generation on your own machine. Three ideas explain it: what it does, how the tags work, and how to set it up.</td></tr>
+    <tr><td colspan="3" class="transition-cell"><span class="label">Transition 1</span>This project runs voice generation on your own machine. Three ideas explain it: what it does, how the tags work, and how to set it up.</td></tr>
 
     <tr><td colspan="3" class="act-header">ACT 2: DEVELOP THE ACTION</td></tr>
     <tr>
@@ -140,8 +165,7 @@
       <td>Results saved to an outputs folder</td>
     </tr>
 
-    <tr><td colspan="3" class="section-header">TRANSITION 2</td></tr>
-    <tr><td colspan="3">Restate: local TTS turns scripts into audio. Relate: good audio needs pacing and atmosphere. Introduce: the tags that control them.</td></tr>
+    <tr><td colspan="3" class="transition-cell"><span class="label">Transition 2</span>Local text-to-speech turns your scripts into audio without sending text anywhere. Good audio also needs pacing and atmosphere, so let's look at the simple tags that shape the performance.</td></tr>
 
     <tr>
       <td rowspan="9" class="key-idea-cell"><span class="label">Key Idea 2</span>Simple Tags Shape the Performance</td><td rowspan="3" class="explanation-cell"><span class="label">Explanation 1</span><strong>Pauses:</strong> control the pace</td><td>Tag with seconds, like pause:2</td>
@@ -171,8 +195,7 @@
       <td>Reference them in the script</td>
     </tr>
 
-    <tr><td colspan="3" class="section-header">TRANSITION 3</td></tr>
-    <tr><td colspan="3">Restate: tags shape pauses, music, and voices. Relate: the setup has to be easy and legal to use. Introduce: quick start and licensing.</td></tr>
+    <tr><td colspan="3" class="transition-cell"><span class="label">Transition 3</span>With tags you set the pauses, music, and voices. Getting it running is quick, but a few responsibilities come with it, so let's cover setup and licensing.</td></tr>
 
     <tr>
       <td rowspan="9" class="key-idea-cell"><span class="label">Key Idea 3</span>Setup Is Quick and Licensing Is Your Responsibility</td><td rowspan="3" class="explanation-cell"><span class="label">Explanation 1</span><strong>Quick Start:</strong> run it in minutes</td><td>Windows: double-click script.bat</td>
@@ -219,7 +242,7 @@
 
     <tr>
       <td colspan="3" class="footer-text">
-        Beyond Bullet Points Story Template, &copy; 2007 Cliff Atkinson<br>
+        Based on the Beyond Bullet Points story template by Cliff Atkinson<br>
         Spoken Word (Local TTS)
       </td>
     </tr>
