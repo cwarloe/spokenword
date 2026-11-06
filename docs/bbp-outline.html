@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>BBP Outline - Spoken Word (Local TTS)</title>
+  <style>
+    /* Theme: blue is the default. Switch with <body data-theme="green|orange|purple|gray"> */
+    :root {
+      --accent: #1f5f9e;        /* strong: act bars, outer border */
+      --accent-mid: #bcd4ec;    /* key idea cells */
+      --accent-soft: #dce9f6;   /* section headers */
+      --accent-faint: #eef4fa;  /* explanation cells */
+      --accent-ink: #12365c;    /* text on tints */
+      --line: #8fb0d1;
+    }
+    body[data-theme="green"]  { --accent:#2e7d4f; --accent-mid:#bfe0cc; --accent-soft:#dcefe3; --accent-faint:#eff7f2; --accent-ink:#17482c; --line:#93c1a5; }
+    body[data-theme="orange"] { --accent:#c25e12; --accent-mid:#f5d2b0; --accent-soft:#fbe6d2; --accent-faint:#fdf3ea; --accent-ink:#6b3207; --line:#e0b48a; }
+    body[data-theme="purple"] { --accent:#6b46a8; --accent-mid:#d9cbee; --accent-soft:#e8dff6; --accent-faint:#f5f0fb; --accent-ink:#3a2266; --line:#b9a4dc; }
+    body[data-theme="gray"]   { --accent:#4a4f57; --accent-mid:#d0d3d8; --accent-soft:#e4e6e9; --accent-faint:#f3f4f5; --accent-ink:#23262b; --line:#a5a9b0; }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: white;
+      color: #1b1b1b;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    h1, h2 { color: var(--accent-ink); }
+
+    .bbp-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 2px solid var(--accent);
+      margin-bottom: 20px;
+      table-layout: fixed;
+    }
+
+    .bbp-table td {
+      border: 1px solid var(--line);
+      padding: 12px;
+      vertical-align: top;
+      font-size: 11pt;
+    }
+
+    .section-header {
+      background-color: var(--accent-soft);
+      color: var(--accent-ink);
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .act-header {
+      background-color: var(--accent);
+      color: #fff;
+      font-weight: bold;
+      font-size: 12pt;
+      text-align: center;
+    }
+
+    .key-idea-cell {
+      background-color: var(--accent-mid);
+      color: var(--accent-ink);
+      font-weight: bold;
+      vertical-align: middle;
+    }
+
+    .explanation-cell {
+      background-color: var(--accent-faint);
+      vertical-align: middle;
+    }
+
+    .transition-cell {
+      background-color: #fff;
+    }
+
+    .footer-text {
+      font-size: 10pt;
+      font-style: italic;
+      text-align: center;
+    }
+
+    .label {
+      display: block;
+      font-size: 9pt;
+      font-weight: normal;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body data-theme="blue">
+  <h1>Beyond Bullet Points Outline</h1>
+  <h2>Spoken Word (Local TTS)</h2>
+  <h3>Audience: creators who want offline voiceovers with pauses and background music</h3>
+
+  <table class="bbp-table">
+    <colgroup>
+      <col style="width: 30%">
+      <col style="width: 30%">
+      <col style="width: 40%">
+    </colgroup>
+
+    <tr><td colspan="3" class="section-header">TITLE</td></tr>
+    <tr>
+      <td colspan="3"><strong>Offline Voiceovers You Control</strong><br>A ready-to-run local text-to-speech setup with voices, pauses, and background music.</td>
+    </tr>
+
+    <tr><td colspan="3" class="act-header">ACT 1: SETUP</td></tr>
+    <tr>
+      <td class="section-header">Setting</td>
+      <td class="section-header" colspan="2">Role</td>
+    </tr>
+    <tr>
+      <td>You write scripts that need to be spoken aloud, with pacing and a bed of music.</td>
+      <td colspan="2">You're a creator who wants control without sending text to an online service.</td>
+    </tr>
+    <tr>
+      <td class="section-header">Point A (Where am I?)</td>
+      <td class="section-header">Call to Action (How do I get from A to B?)</td>
+      <td class="section-header">Point B (Where do I want to be?)</td>
+    </tr>
+    <tr>
+      <td>Online voice tools are costly or restrictive, and pacing and music take extra editing.</td>
+      <td>Run the sample, add pause and music tags, and swap in licensed voices.</td>
+      <td>Voiceovers made offline on your terms.</td>
+    </tr>
+
+    <tr><td colspan="3" class="transition-cell"><span class="label">Transition 1</span>This project runs voice generation on your own machine. Three ideas explain it: what it does, how the tags work, and how to set it up.</td></tr>
+
+    <tr><td colspan="3" class="act-header">ACT 2: DEVELOP THE ACTION</td></tr>
+    <tr>
+      <td class="section-header">Key Idea (5 minutes)</td>
+      <td class="section-header">Explanation (15 minutes)</td>
+      <td class="section-header">Details (45 minutes)</td>
+    </tr>
+
+    <tr>
+      <td rowspan="9" class="key-idea-cell"><span class="label">Key Idea 1</span>Local Text-to-Speech Turns Scripts into Audio, Offline</td><td rowspan="3" class="explanation-cell"><span class="label">Explanation 1</span><strong>Coqui XTTS v2:</strong> the voice engine</td><td>Ready to run</td>
+    </tr>
+    <tr>
+      <td>Works offline on your machine</td>
+    </tr>
+    <tr>
+      <td>Sample project included</td>
+    </tr>
+    <tr>
+      <td rowspan="3" class="explanation-cell"><span class="label">Explanation 2</span><strong>Voice Modes:</strong> one voice or many</td><td>Single-voice generation</td>
+    </tr>
+    <tr>
+      <td>Multi-voice generation</td>
+    </tr>
+    <tr>
+      <td>Four voice files included</td>
+    </tr>
+    <tr>
+      <td rowspan="3" class="explanation-cell"><span class="label">Explanation 3</span><strong>Scripts and Output:</strong> from text to audio</td><td>Script text in a plain text file</td>
+    </tr>
+    <tr>
+      <td>Example scripts included</td>
+    </tr>
+    <tr>
+      <td>Results saved to an outputs folder</td>
+    </tr>
+
+    <tr><td colspan="3" class="transition-cell"><span class="label">Transition 2</span>Local text-to-speech turns your scripts into audio without sending text anywhere. Good audio also needs pacing and atmosphere, so let's look at the simple tags that shape the performance.</td></tr>
+
+    <tr>
+      <td rowspan="9" class="key-idea-cell"><span class="label">Key Idea 2</span>Simple Tags Shape the Performance</td><td rowspan="3" class="explanation-cell"><span class="label">Explanation 1</span><strong>Pauses:</strong> control the pace</td><td>Tag with seconds, like pause:2</td>
+    </tr>
+    <tr>
+      <td>Placed anywhere inline</td>
+    </tr>
+    <tr>
+      <td>Builds natural timing</td>
+    </tr>
+    <tr>
+      <td rowspan="3" class="explanation-cell"><span class="label">Explanation 2</span><strong>Background Music:</strong> add atmosphere</td><td>Tag names a music file</td>
+    </tr>
+    <tr>
+      <td>A calm track is the default</td>
+    </tr>
+    <tr>
+      <td>Music mixed under the voice</td>
+    </tr>
+    <tr>
+      <td rowspan="3" class="explanation-cell"><span class="label">Explanation 3</span><strong>Voice Switching:</strong> assign speakers</td><td>Tag names the voice</td>
+    </tr>
+    <tr>
+      <td>Add your own voice names</td>
+    </tr>
+    <tr>
+      <td>Reference them in the script</td>
+    </tr>
+
+    <tr><td colspan="3" class="transition-cell"><span class="label">Transition 3</span>With tags you set the pauses, music, and voices. Getting it running is quick, but a few responsibilities come with it, so let's cover setup and licensing.</td></tr>
+
+    <tr>
+      <td rowspan="9" class="key-idea-cell"><span class="label">Key Idea 3</span>Setup Is Quick and Licensing Is Your Responsibility</td><td rowspan="3" class="explanation-cell"><span class="label">Explanation 1</span><strong>Quick Start:</strong> run it in minutes</td><td>Windows: double-click script.bat</td>
+    </tr>
+    <tr>
+      <td>Mac and Linux: virtual environment and pip</td>
+    </tr>
+    <tr>
+      <td>Choose multi-voice mode to hear tags</td>
+    </tr>
+    <tr>
+      <td rowspan="3" class="explanation-cell"><span class="label">Explanation 2</span><strong>Replace the Placeholders:</strong> use real voices</td><td>Included voices are simple tone placeholders</td>
+    </tr>
+    <tr>
+      <td>Use 6 to 10 second clean clips</td>
+    </tr>
+    <tr>
+      <td>License-free sources like Common Voice or LibriVox</td>
+    </tr>
+    <tr>
+      <td rowspan="3" class="explanation-cell"><span class="label">Explanation 3</span><strong>Licensing and Consent:</strong> your call</td><td>Repo has only code and synthetic audio</td>
+    </tr>
+    <tr>
+      <td>Check licenses for voices and music</td>
+    </tr>
+    <tr>
+      <td>Get consent for any real voice</td>
+    </tr>
+
+    <tr><td colspan="3" class="act-header">ACT 3: RESOLUTION</td></tr>
+    <tr>
+      <td class="section-header">Challenge (Recap)</td>
+      <td class="section-header">Action</td>
+      <td class="section-header">Outcome</td>
+    </tr>
+    <tr>
+      <td><strong>Can I make polished audio on my own machine?</strong><br><br>• Which script do I want to voice?<br>• What pacing and music fit?<br>• Whose voices may I use?</td>
+      <td><strong>Try it:</strong><br><br>• Run the sample in multi-voice mode<br>• Add pause and music tags to your script<br>• Swap in licensed voice clips</td>
+      <td><strong>Voiceovers on your terms:</strong><br><br>• Audio made offline<br>• Pacing and music built into the script<br>• Voices you have the right to use</td>
+    </tr>
+
+    <tr><td colspan="3" class="section-header">CLOSING LINE</td></tr>
+    <tr><td colspan="3">Write the script, tag the pauses, and let it speak.</td></tr>
+
+    <tr>
+      <td colspan="3" class="footer-text">
+        Based on the Beyond Bullet Points story template by Cliff Atkinson<br>
+        Spoken Word (Local TTS)
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
